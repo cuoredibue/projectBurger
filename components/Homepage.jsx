@@ -15,7 +15,7 @@ const HomePage = () => {
         <p className="text-gray-400 leading-8 mx-16">
           scopri i diversi sapori e gustateli in qualsiasi momento
         </p>
-        <Link href="/order/Menu">
+        <Link href="/orderNow/menuCompleto">
           <button className="text-gray-100  bg-gray-700/40 mt-4 p-6 rounded-full">
             <svg
               width="30"

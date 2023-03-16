@@ -1,12 +1,18 @@
-import { CabinOutlined } from "@mui/icons-material";
-import Image from "next/image";
-
 const FoodCard = (props) => {
-  const { name, img } = props;
+  const { name, price, description, setIsOpen, setInfoCard } = props;
   return (
-    <div className="text-center">
-      <Image src={img} width={200} height={200} alt="burger" />
-      <p className="text-gray-300">{name}</p>
+    <div
+      onClick={() => {
+        setIsOpen(true);
+        setInfoCard({ name, price, description });
+      }}
+      className=" flex p-4 items-center justify-between  rounded-lg  bg-gray-700/50 "
+    >
+      <div className="space-y-2">
+        <p className="text-gray-200 ">{name}</p>
+        <p className=" text-gray-500">{description}</p>
+        <p className=" text-gray-200 ">{`${price.toFixed(2)} €`}</p>
+      </div>
     </div>
   );
 };
