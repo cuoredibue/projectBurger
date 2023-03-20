@@ -2,11 +2,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { supabase } from "..";
 import AddOrderMenu from "../../components/addOrderMenu";
-import BurgerList from "../../foodsAndDrinks/BurgerList";
-import Dolci from "../../foodsAndDrinks/Dolci";
-import BurgerMenu from "../../foodsAndDrinks/MenuBurgerList";
-import Drinks from "../../foodsAndDrinks/DrinksList";
 import FooterMessage from "../../components/FooterMessage";
+import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
 
 const SearchPage = () => {
   const [list, setList] = useState([]);
@@ -16,28 +13,32 @@ const SearchPage = () => {
   const [infoCard, setInfoCard] = useState({});
   const [orderList, setOrderList] = useState([]);
   const [itemNotFound, setItemNotFound] = useState(null);
+  const databaseList = ["order", "menuCompleto"];
 
-  const handleLists = () => {
-    let finalList = [];
-    finalList = BurgerList.concat(BurgerMenu, Drinks, Dolci);
-    setList(finalList);
-  };
-
-  useEffect(() => {
-    handleLists();
-    fetchData();
-  }, []);
-
-  // controllo nel database se sono ci stati degli ordini non ancora conclusi
-  const fetchData = async () => {
-    const { data, error } = await supabase.from("order").select();
+  const fetchData = async (database) => {
+    const { data, error } = await supabase.from(database).select();
+    if (data) {
+      {
+        database === "menuCompleto" && setList(data);
+      }
+      {
+        database === "order" && setOrderList(data);
+      }
+    }
     if (error) {
       console.log(error);
     }
-    if (data) {
-      setOrderList(data);
-    }
   };
+
+  const fetchAllTable = () => {
+    databaseList.map((database) => {
+      fetchData(database);
+    });
+  };
+
+  useEffect(() => {
+    fetchAllTable();
+  }, []);
 
   const setName = () => {
     if (!inputValue) {
@@ -66,17 +67,15 @@ const SearchPage = () => {
 
     if (error) {
       console.log(error);
-    } else {
-      console.log("inserted data");
     }
-    fetchData();
+    fetchData("order");
   };
 
   return (
     <div className="">
       <div className="flex shadow h-10 items-center space-x-2 ">
         <Link href="/orderNow/menuCompleto">
-          <div>back</div>
+          <ArrowBackIosNewOutlinedIcon className="text-gray-400" />
         </Link>
         <input
           autoFocus
@@ -84,37 +83,53 @@ const SearchPage = () => {
             setInputValue(e.target.value.toLocaleLowerCase());
           }}
           value={inputValue}
-          className="bg-gray-200 h-8 p-2 w-screen focus:outline-none "
+          className="bg-white h-10 p-2 w-screen focus:outline-none "
           placeholder="Cerca nel menu "
           type="text"
         />
       </div>
+      {itemNotFound !== null && <div className=" p-2">{itemNotFound}</div>}
       {inputValue !== "" && (
-        <ul>
+        <div className=" space-y-2 pb-14">
           {filteredList.map((item, index) => {
             const { name, price, description } = item;
+            const newName = name.toLowerCase();
+            const firstPartName = newName.split(inputValue)[0];
+            const secondPartName = newName.split(inputValue).pop();
+
             return (
-              <li
+              <div
+                key={index}
                 onClick={() => {
                   setIsOpen(true);
                   setInfoCard({ name, price, description });
                 }}
-                key={index}
+                className="p-2 shadow"
               >
-                {name}
-              </li>
+                <div className="flex font-semibold text-lg">
+                  <p>{firstPartName}</p>
+                  <p className=" bg-yellow-400 rounded-full">{inputValue}</p>
+                  <p>{secondPartName}</p>
+                </div>
+                <div>
+                  <p>{description}</p>
+                </div>
+                <div>
+                  <p className="text-lg font-semibold">{`${price}€`}</p>
+                </div>
+              </div>
             );
           })}
-        </ul>
+        </div>
       )}
-      {itemNotFound !== null && <p>{itemNotFound}</p>}
+
       <AddOrderMenu
         infoCard={infoCard}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         addToOrder={addToOrder}
       />
-      <div className="absolute bottom-0 w-screen">
+      <div className="fixed w-screen bottom-0 ">
         {orderList.length > 0 && <FooterMessage orderList={orderList} />}
       </div>
     </div>

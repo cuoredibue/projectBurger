@@ -4,19 +4,19 @@ import Image from "next/image";
 
 const HomePage = () => {
   return (
-    <div className="grid grid-cols-1 content-center h-screen">
+    <div className="grid grid-cols-1 bg-gradient-to-b from-amber-400 to-amber-300 content-center h-screen">
       <div className="flex justify-center">
-        <Image alt="burger" src={logo} width={300} height={300} />
+        <Image alt="burger-image" src={logo} width={200} height={200} />
       </div>
       <div className="text-center space-y-4">
-        <h1 className="text-gray-100 mx-16 text-4xl">
-          Assaggia il migliore adesso!
+        <h1 className="text-amber-800 font-semibold mx-16 text-4xl">
+          Burger giusto!
         </h1>
-        <p className="text-gray-400 leading-8 mx-16">
+        <p className="text-amber-800 leading-8 mx-16">
           scopri i diversi sapori e gustateli in qualsiasi momento
         </p>
         <Link href="/orderNow/menuCompleto">
-          <button className="text-gray-100  bg-gray-700/40 mt-4 p-6 rounded-full">
+          <button className="text-gray-100  bg-amber-500 mt-4 p-6 rounded-full">
             <svg
               width="30"
               height="30"

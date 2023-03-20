@@ -2,11 +2,11 @@ const HeaderNavbar = (props) => {
   const { handleNavigation, activeTitle } = props;
 
   return (
-    <div className="flex justify-between items-center  px-5 h-14 z-10 -mx-4 text-white bg-gray-500">
+    <div className="flex justify-between items-center font-semibold shadow-md px-5 h-14 z-10 -mx-4 text-amber-500 bg-white">
       <div
         className={
           (activeTitle === "burger" &&
-            "text-gray-700 bg-white px-3 rounded-full") ||
+            "text-white bg-amber-500 px-3 rounded-full") ||
           "px-3"
         }
         onClick={() => {
@@ -21,7 +21,7 @@ const HeaderNavbar = (props) => {
         }}
         className={
           (activeTitle === "menu" &&
-            "text-gray-700 bg-white px-3 rounded-full") ||
+            "text-white bg-amber-500 px-3 rounded-full") ||
           "px-3"
         }
       >
@@ -33,7 +33,7 @@ const HeaderNavbar = (props) => {
         }}
         className={
           (activeTitle === "drinks" &&
-            "text-gray-700 bg-white px-3 rounded-full") ||
+            "text-white bg-amber-500 px-3 rounded-full") ||
           "px-3"
         }
       >
@@ -45,7 +45,7 @@ const HeaderNavbar = (props) => {
         }}
         className={
           (activeTitle === "dolci" &&
-            "text-gray-700 bg-white px-3 rounded-full") ||
+            "text-white bg-amber-500 px-3 rounded-full") ||
           "px-3"
         }
       >

@@ -6,12 +6,12 @@ const FoodCard = (props) => {
         setIsOpen(true);
         setInfoCard({ name, price, description });
       }}
-      className=" flex p-4 items-center justify-between  rounded-lg  bg-gray-700/50 "
+      className=" flex p-4 items-center justify-between  rounded-lg  shadow-md border border-gray-100  bg-white "
     >
       <div className="space-y-2">
-        <p className="text-gray-200 ">{name}</p>
-        <p className=" text-gray-500">{description}</p>
-        <p className=" text-gray-200 ">{`${price.toFixed(2)} €`}</p>
+        <p className="text-black font-semibold">{name}</p>
+        <p className=" text-black text-sm">{description}</p>
+        <p className=" text-black font-semibold">{`${price.toFixed(2)} €`}</p>
       </div>
     </div>
   );

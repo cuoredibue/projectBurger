@@ -8,7 +8,7 @@ const BurgerList = [
   },
   {
     name: "Piemontese",
-    price: 13.5,
+    price: 13,
     description: "fassona, lattuga, formaggio, pomodoro",
     id: 100,
   },

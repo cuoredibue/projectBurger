@@ -1,38 +1,63 @@
+import { useEffect, useState, useRef } from "react";
+import { supabase } from "../index";
+import Image from "next/image";
+import burgerImage from "../../images/burgerOrder.jpg";
+
+// components
 import HeaderNavbar from "../../components/HeaderNavbar";
-import BurgerList from "../../foodsAndDrinks/BurgerList";
 import AddOrderMenu from "../../components/addOrderMenu";
 import FoodCard from "../../components/FoodCard";
 import Header from "../../components/Header";
-import Drinks from "../../foodsAndDrinks/DrinksList";
-import Dolci from "../../foodsAndDrinks/Dolci";
-import BurgerMenu from "../../foodsAndDrinks/MenuBurgerList";
-import { useEffect, useState, useRef } from "react";
-import { supabase } from "../index";
 import FooterMessage from "../../components/FooterMessage";
+import { Fullscreen } from "@mui/icons-material";
 
 const MenuCompleto = () => {
   const [activeSection, setActiveSection] = useState("burger");
-  const [foodsDrinksList, setFoodsDrinksList] = useState(BurgerList);
   const [activeTitle, setActiveTitle] = useState("burger");
   const navbarRef = useRef(null);
   let [isOpen, setIsOpen] = useState(false);
   const [infoCard, setInfoCard] = useState({});
   const [orderList, setOrderList] = useState([]);
+  const [burgerList, setBurgerList] = useState([]);
+  const [comboBurgerList, setComboMenuList] = useState([]);
+  const [drinksList, setDrinksList] = useState([]);
+  const [dolciList, setDolciList] = useState([]);
+  const databaseList = ["order", "burger", "comboMenu", "drinks", "dolci"];
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  // controllo nel database se sono ci stati degli ordini non ancora conclusi
-  const fetchData = async () => {
-    const { data, error } = await supabase.from("order").select();
+  // imposte le liste con i dati presenti nel database
+  const fetchData = async (database) => {
+    const { data, error } = await supabase.from(database).select();
+    if (data) {
+      {
+        database === "burger" && setBurgerList(data);
+      }
+      {
+        database === "order" && setOrderList(data);
+      }
+      {
+        database === "comboMenu" && setComboMenuList(data);
+      }
+      {
+        database === "drinks" && setDrinksList(data);
+      }
+      {
+        database === "dolci" && setDolciList(data);
+      }
+    }
     if (error) {
       console.log(error);
     }
-    if (data) {
-      setOrderList(data);
-    }
   };
+
+  const fetchAllTable = async () => {
+    databaseList.map((database) => {
+      fetchData(database);
+    });
+  };
+
+  useEffect(() => {
+    fetchAllTable();
+  }, []);
 
   // questa parte riguarda la navigazione nella lista attraverso i bottoni nella navbar
   const handleNavigation = (section) => {
@@ -71,28 +96,50 @@ const MenuCompleto = () => {
     };
   }, []);
 
-  const addToOrder = async (name, price, quantity) => {
-    const { error } = await supabase
+  // prima d'aggiungere una nuova riga nel database, verifico che non ne esista nessuna con lo stesso "name"
+  const addToOrder = async (name, price, quantity, description) => {
+    const { data: previousData, error } = await supabase
       .from("order")
-      .insert({ name, price, quantity });
+      .select()
+      .eq("name", name)
+      .single();
 
     if (error) {
       console.log(error);
-    } else {
-      console.log("inserted data");
     }
-    fetchData();
+
+    if (previousData) {
+      const newQuantity = quantity + previousData.quantity;
+      const newPrice = price + previousData.price;
+      const { data, error } = await supabase.from("order").upsert({
+        id: previousData.id,
+        name,
+        price: newPrice,
+        quantity: newQuantity,
+      });
+      if (error) {
+        console.log(error);
+      }
+    }
+
+    if (!previousData) {
+      const { data, error } = await supabase
+        .from("order")
+        .insert({ name, quantity, price, description });
+      if (error) {
+        console.log(error);
+      }
+    }
+
+    fetchData("order");
   };
 
   return (
-    <div className=" h-screen w-screen grid bg-black">
-      <Header
-        foodsDrinksList={foodsDrinksList}
-        setFoodsDrinksList={setFoodsDrinksList}
-        BurgerList={BurgerList}
-      />
+    <div className=" h-screen w-screen grid bg-white">
+      <Header />
+      <Image src={burgerImage} alt="burger" className="h-42" />
 
-      <div className="grid gap-4 pb-4 grid-cols-1 bg-black px-4">
+      <div className="grid gap-4 pb-4 grid-cols-1 bg-white px-4">
         <div ref={navbarRef} className="sticky top-0">
           <HeaderNavbar
             activeTitle={activeTitle}
@@ -100,27 +147,35 @@ const MenuCompleto = () => {
           />
         </div>
 
-        <div id="title-burger" className="h-8 bg-black text-white pl-4">
+        <div id="title-burger" className="h-8 bg-white text-black pl-4">
           burger
         </div>
-        {BurgerList.map((item, index) => {
-          const { name, price, description } = item;
-          return (
-            <FoodCard
-              name={name}
-              price={price}
-              description={description}
-              key={index}
-              setIsOpen={setIsOpen}
-              setInfoCard={setInfoCard}
-              id="burger"
-            />
-          );
-        })}
-        <div id="title-menu" className="h-8 bg-black text-white pl-4">
+        <div
+          className={
+            (burgerList.length === 0 && "h-screen w-full bg-white") ||
+            "space-y-4 bg-white"
+          }
+        >
+          {burgerList.map((item, index) => {
+            const { name, price, description } = item;
+            return (
+              <FoodCard
+                name={name}
+                price={price}
+                description={description}
+                key={index}
+                setIsOpen={setIsOpen}
+                setInfoCard={setInfoCard}
+                id="burger"
+              />
+            );
+          })}
+        </div>
+        <div id="title-menu" className="h-8 bg-white text-black  pl-4">
           menu
         </div>
-        {BurgerMenu.map((item, index) => {
+
+        {comboBurgerList.map((item, index) => {
           const { name, price, description, id } = item;
           return (
             <FoodCard
@@ -134,10 +189,11 @@ const MenuCompleto = () => {
             />
           );
         })}
-        <div id="title-drinks" className="h-8 bg-black text-white pl-4">
+
+        <div id="title-drinks" className="h-8 bg-white text-black  pl-4">
           drinks
         </div>
-        {Drinks.map((item, index) => {
+        {drinksList.map((item, index) => {
           const { name, price, description, id } = item;
           return (
             <FoodCard
@@ -151,10 +207,10 @@ const MenuCompleto = () => {
             />
           );
         })}
-        <div id="title-dolci" className="h-8 bg-black text-white pl-4">
+        <div id="title-dolci" className="h-8 bg-white text-black  pl-4">
           dolci
         </div>
-        {Dolci.map((item, index) => {
+        {dolciList.map((item, index) => {
           const { name, price, description, id } = item;
           return (
             <FoodCard
@@ -175,6 +231,7 @@ const MenuCompleto = () => {
         setIsOpen={setIsOpen}
         addToOrder={addToOrder}
       />
+
       {orderList.length > 0 && <FooterMessage orderList={orderList} />}
     </div>
   );

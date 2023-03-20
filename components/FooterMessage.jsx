@@ -35,13 +35,13 @@ const FooterMessage = (props) => {
         onClick={() => {
           console.log(length);
         }}
-        className="place-self-end sticky bottom-0  bg-gray-700 p-3 w-full "
+        className="place-self-end sticky bottom-0  bg-amber-500 p-2 w-full "
       >
         <Link href="/payment/checkout">
           <div className="flex text-white items-center space-x-3">
             <div className="flex">
               <ShoppingBasketOutlinedIcon fontSize="large" />
-              <div className="text-gray-700 flex justify-center items-center text-sm h-5 w-5 bg-white border-2 border-gray-700 mt-1 -ml-2 rounded-full">
+              <div className="text-amber-500 flex justify-center items-center font-semibold text-xs h-5 w-5 bg-white border-2 border-amber-500 mt-1 -ml-2 rounded-full">
                 {numberOfOrders}
               </div>
             </div>
