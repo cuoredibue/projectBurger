@@ -4,7 +4,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 const AddOrderMenu = (props) => {
   const { isOpen, setIsOpen, infoCard, addToOrder } = props;
-  const { name, description, price } = infoCard;
+  const { name, description, price, price_id } = infoCard;
   const [quantity, setQuantity] = useState(1);
   const newPrice = price * quantity;
 
@@ -93,7 +93,13 @@ const AddOrderMenu = (props) => {
                       </div>
                       <button
                         onClick={() => {
-                          addToOrder(name, newPrice, quantity, description);
+                          addToOrder(
+                            name,
+                            newPrice,
+                            quantity,
+                            description,
+                            price_id
+                          );
                           setIsOpen(false);
                           setQuantity(1);
                         }}

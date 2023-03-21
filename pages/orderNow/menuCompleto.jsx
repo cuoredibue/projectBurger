@@ -97,7 +97,7 @@ const MenuCompleto = () => {
   }, []);
 
   // prima d'aggiungere una nuova riga nel database, verifico che non ne esista nessuna con lo stesso "name"
-  const addToOrder = async (name, price, quantity, description) => {
+  const addToOrder = async (name, price, quantity, description, price_id) => {
     const { data: previousData, error } = await supabase
       .from("order")
       .select()
@@ -125,7 +125,7 @@ const MenuCompleto = () => {
     if (!previousData) {
       const { data, error } = await supabase
         .from("order")
-        .insert({ name, quantity, price, description });
+        .insert({ name, quantity, price, description, price_id });
       if (error) {
         console.log(error);
       }
@@ -157,7 +157,7 @@ const MenuCompleto = () => {
           }
         >
           {burgerList.map((item, index) => {
-            const { name, price, description } = item;
+            const { name, price, description, price_id } = item;
             return (
               <FoodCard
                 name={name}
@@ -166,6 +166,7 @@ const MenuCompleto = () => {
                 key={index}
                 setIsOpen={setIsOpen}
                 setInfoCard={setInfoCard}
+                price_id={price_id}
                 id="burger"
               />
             );
@@ -176,7 +177,7 @@ const MenuCompleto = () => {
         </div>
 
         {comboBurgerList.map((item, index) => {
-          const { name, price, description, id } = item;
+          const { name, price, description, price_id } = item;
           return (
             <FoodCard
               name={name}
@@ -185,6 +186,7 @@ const MenuCompleto = () => {
               key={index}
               setIsOpen={setIsOpen}
               setInfoCard={setInfoCard}
+              price_id={price_id}
               id="menu"
             />
           );
@@ -194,7 +196,7 @@ const MenuCompleto = () => {
           drinks
         </div>
         {drinksList.map((item, index) => {
-          const { name, price, description, id } = item;
+          const { name, price, description, price_id } = item;
           return (
             <FoodCard
               name={name}
@@ -203,6 +205,7 @@ const MenuCompleto = () => {
               key={index}
               setIsOpen={setIsOpen}
               setInfoCard={setInfoCard}
+              price_id={price_id}
               id="drinks"
             />
           );
@@ -211,7 +214,7 @@ const MenuCompleto = () => {
           dolci
         </div>
         {dolciList.map((item, index) => {
-          const { name, price, description, id } = item;
+          const { name, price, description, price_id } = item;
           return (
             <FoodCard
               name={name}
@@ -220,6 +223,7 @@ const MenuCompleto = () => {
               key={index}
               setIsOpen={setIsOpen}
               setInfoCard={setInfoCard}
+              price_id={price_id}
               id="dolci"
             />
           );

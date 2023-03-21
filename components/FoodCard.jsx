@@ -1,10 +1,10 @@
 const FoodCard = (props) => {
-  const { name, price, description, setIsOpen, setInfoCard } = props;
+  const { name, price, description, setIsOpen, setInfoCard, price_id } = props;
   return (
     <div
       onClick={() => {
         setIsOpen(true);
-        setInfoCard({ name, price, description });
+        setInfoCard({ name, price, description, price_id });
       }}
       className=" flex p-4 items-center justify-between  rounded-lg  shadow-md border border-gray-100  bg-white "
     >
