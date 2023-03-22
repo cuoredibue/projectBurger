@@ -9,7 +9,13 @@ import AddOrderMenu from "../../components/addOrderMenu";
 import FoodCard from "../../components/FoodCard";
 import Header from "../../components/Header";
 import FooterMessage from "../../components/FooterMessage";
-import { Fullscreen } from "@mui/icons-material";
+import CheckoutComponent from "../../components/CheckoutComponent";
+
+import Checkout from "../payment/checkout";
+import { loadStripe } from "@stripe/stripe-js";
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+);
 
 const MenuCompleto = () => {
   const [activeSection, setActiveSection] = useState("burger");
@@ -22,6 +28,7 @@ const MenuCompleto = () => {
   const [comboBurgerList, setComboMenuList] = useState([]);
   const [drinksList, setDrinksList] = useState([]);
   const [dolciList, setDolciList] = useState([]);
+  const [modifyOrder, setModifyOrder] = useState(false);
   const databaseList = ["order", "burger", "comboMenu", "drinks", "dolci"];
 
   // imposte le liste con i dati presenti nel database
@@ -67,7 +74,7 @@ const MenuCompleto = () => {
   };
 
   //modifico stile di un bottone nella navbar a seconda della sezione della lista in cui ci si trova
-  //il pattern sarà quando il titolo di una sezione toccherà il punto più alto dello schermo
+  //il trigger sarà quando il titolo di una sezione toccherà il punto più alto dello schermo
   function updateActiveTitle() {
     const sections = ["burger", "menu", "drinks", "dolci"];
     const titles = sections.map((section) =>
@@ -134,109 +141,129 @@ const MenuCompleto = () => {
     fetchData("order");
   };
 
+  const updateData = async (name, quantity, newPrice) => {
+    const { data, error } = await supabase
+      .from("order")
+      .update({ name, quantity, price: newPrice })
+      .eq("name", name)
+      .select();
+
+    fetchData("order");
+  };
   return (
     <div className=" h-screen w-screen grid bg-white">
       <Header />
       <Image src={burgerImage} alt="burger" className="h-42" />
+      <div className="sm:grid sm:grid-cols-3">
+        <div className="grid gap-4 pb-4 grid-cols-1 col-span-2 bg-white px-4">
+          <div ref={navbarRef} className="sticky top-0">
+            <HeaderNavbar
+              activeTitle={activeTitle}
+              handleNavigation={handleNavigation}
+            />
+          </div>
 
-      <div className="grid gap-4 pb-4 grid-cols-1 bg-white px-4">
-        <div ref={navbarRef} className="sticky top-0">
-          <HeaderNavbar
-            activeTitle={activeTitle}
-            handleNavigation={handleNavigation}
-          />
-        </div>
+          <div id="title-burger" className="h-8 bg-white text-black pl-4">
+            burger
+          </div>
+          <div
+            className={
+              (burgerList.length === 0 && "h-screen w-full bg-white") ||
+              "space-y-4 bg-white"
+            }
+          >
+            {burgerList.map((item, index) => {
+              const { name, price, description, price_id } = item;
+              return (
+                <FoodCard
+                  name={name}
+                  price={price}
+                  description={description}
+                  key={price_id}
+                  setIsOpen={setIsOpen}
+                  setInfoCard={setInfoCard}
+                  price_id={price_id}
+                  id="burger"
+                />
+              );
+            })}
+          </div>
+          <div id="title-menu" className="h-8 bg-white text-black  pl-4">
+            menu
+          </div>
 
-        <div id="title-burger" className="h-8 bg-white text-black pl-4">
-          burger
-        </div>
-        <div
-          className={
-            (burgerList.length === 0 && "h-screen w-full bg-white") ||
-            "space-y-4 bg-white"
-          }
-        >
-          {burgerList.map((item, index) => {
+          {comboBurgerList.map((item, index) => {
             const { name, price, description, price_id } = item;
             return (
               <FoodCard
                 name={name}
                 price={price}
                 description={description}
-                key={index}
+                key={price_id}
                 setIsOpen={setIsOpen}
                 setInfoCard={setInfoCard}
                 price_id={price_id}
-                id="burger"
+                id="menu"
+              />
+            );
+          })}
+
+          <div id="title-drinks" className="h-8 bg-white text-black  pl-4">
+            drinks
+          </div>
+          {drinksList.map((item, index) => {
+            const { name, price, description, price_id } = item;
+            return (
+              <FoodCard
+                name={name}
+                price={price}
+                description={description}
+                key={price_id}
+                setIsOpen={setIsOpen}
+                setInfoCard={setInfoCard}
+                price_id={price_id}
+                id="drinks"
+              />
+            );
+          })}
+          <div id="title-dolci" className="h-8 bg-white text-black  pl-4">
+            dolci
+          </div>
+          {dolciList.map((item, index) => {
+            const { name, price, description, price_id } = item;
+            return (
+              <FoodCard
+                name={name}
+                price={price}
+                description={description}
+                key={price_id}
+                setIsOpen={setIsOpen}
+                setInfoCard={setInfoCard}
+                price_id={price_id}
+                id="dolci"
               />
             );
           })}
         </div>
-        <div id="title-menu" className="h-8 bg-white text-black  pl-4">
-          menu
-        </div>
+        <CheckoutComponent
+          setIsOpen={setIsOpen}
+          setInfoCard={setInfoCard}
+          orderList={orderList}
+          setModifyOrder={setModifyOrder}
+        />
 
-        {comboBurgerList.map((item, index) => {
-          const { name, price, description, price_id } = item;
-          return (
-            <FoodCard
-              name={name}
-              price={price}
-              description={description}
-              key={index}
-              setIsOpen={setIsOpen}
-              setInfoCard={setInfoCard}
-              price_id={price_id}
-              id="menu"
-            />
-          );
-        })}
+        <AddOrderMenu
+          infoCard={infoCard}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          addToOrder={addToOrder}
+          modifyOrder={modifyOrder}
+          setModifyOrder={setModifyOrder}
+          updateData={updateData}
+        />
 
-        <div id="title-drinks" className="h-8 bg-white text-black  pl-4">
-          drinks
-        </div>
-        {drinksList.map((item, index) => {
-          const { name, price, description, price_id } = item;
-          return (
-            <FoodCard
-              name={name}
-              price={price}
-              description={description}
-              key={index}
-              setIsOpen={setIsOpen}
-              setInfoCard={setInfoCard}
-              price_id={price_id}
-              id="drinks"
-            />
-          );
-        })}
-        <div id="title-dolci" className="h-8 bg-white text-black  pl-4">
-          dolci
-        </div>
-        {dolciList.map((item, index) => {
-          const { name, price, description, price_id } = item;
-          return (
-            <FoodCard
-              name={name}
-              price={price}
-              description={description}
-              key={index}
-              setIsOpen={setIsOpen}
-              setInfoCard={setInfoCard}
-              price_id={price_id}
-              id="dolci"
-            />
-          );
-        })}
+        {orderList.length > 0 && <FooterMessage orderList={orderList} />}
       </div>
-      <AddOrderMenu
-        infoCard={infoCard}
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        addToOrder={addToOrder}
-      />
-
-      {orderList.length > 0 && <FooterMessage orderList={orderList} />}
     </div>
   );
 };

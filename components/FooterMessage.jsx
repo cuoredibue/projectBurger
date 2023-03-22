@@ -35,7 +35,7 @@ const FooterMessage = (props) => {
         onClick={() => {
           console.log(length);
         }}
-        className="place-self-end sticky bottom-0  bg-amber-500 p-2 w-full "
+        className="sm:hidden place-self-end sticky bottom-0 bg-amber-500 p-2 w-full "
       >
         <Link href="/payment/checkout">
           <div className="flex text-white items-center space-x-3">

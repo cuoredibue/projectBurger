@@ -93,9 +93,15 @@ const SearchPage = () => {
         <div className=" space-y-2 pb-14">
           {filteredList.map((item, index) => {
             const { name, price, description } = item;
+            // divido in tre parti il nome per potere applicare uno stile personalizzato alla parte equivalente all'input che si digita
+            // col method .indexOf() trovo la posizione del input value nella stringa, poi la divido col method .slice()
             const newName = name.toLowerCase();
-            const firstPartName = newName.split(inputValue)[0];
-            const secondPartName = newName.split(inputValue).pop();
+            const inputValuePosition = newName.indexOf(inputValue);
+            const namePart1 = newName.slice(0, inputValuePosition);
+            const namePart2 = inputValue;
+            const namePart3 = newName.slice(
+              inputValuePosition + inputValue.length
+            );
 
             return (
               <div
@@ -107,9 +113,9 @@ const SearchPage = () => {
                 className="p-2 shadow"
               >
                 <div className="flex font-semibold text-lg">
-                  <p>{firstPartName}</p>
-                  <p className=" bg-yellow-400 rounded-full">{inputValue}</p>
-                  <p>{secondPartName}</p>
+                  <p>{namePart1}</p>
+                  <p className=" bg-yellow-400 rounded-full">{namePart2}</p>
+                  <p>{namePart3}</p>
                 </div>
                 <div>
                   <p>{description}</p>

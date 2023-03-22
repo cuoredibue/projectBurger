@@ -1,12 +1,27 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 
 const AddOrderMenu = (props) => {
-  const { isOpen, setIsOpen, infoCard, addToOrder } = props;
-  const { name, description, price, price_id } = infoCard;
-  const [quantity, setQuantity] = useState(1);
-  const newPrice = price * quantity;
+  const {
+    isOpen,
+    setIsOpen,
+    infoCard,
+    addToOrder,
+    modifyOrder,
+    setModifyOrder,
+    updateData,
+  } = props;
+  const { name, description, price, price_id, singleItemPrice, quantity } =
+    infoCard;
+  const [newOrderQuantity, setNewOrderQuantity] = useState(1);
+  const [lastOrderQuantity, setLastOrderQuantity] = useState();
+  const newOrderPrice = price * newOrderQuantity;
+  const lastOrderPrice = singleItemPrice * lastOrderQuantity;
+
+  useEffect(() => {
+    setLastOrderQuantity(quantity);
+  }, [infoCard]);
 
   return (
     <>
@@ -16,6 +31,7 @@ const AddOrderMenu = (props) => {
           className="relative z-20"
           onClose={() => {
             setIsOpen(false);
+            setModifyOrder(false);
           }}
         >
           <Transition.Child
@@ -30,8 +46,8 @@ const AddOrderMenu = (props) => {
             <div className="fixed inset-0 bg-black bg-opacity-25" />
           </Transition.Child>
 
-          <div className="  overflow-y-auto">
-            <div className="fixed bottom-0 ">
+          <div className="fixed  inset-0 overflow-y-auto">
+            <div className="fixed bottom-0 sm:flex sm:min-h-full sm:items-center sm:justify-center w-full sm:text-center ">
               <Transition.Child
                 as={Fragment}
                 enter="ease-out duration-100"
@@ -42,7 +58,7 @@ const AddOrderMenu = (props) => {
                 leaveTo="opacity-0 scale-100"
               >
                 <Dialog.Panel>
-                  <div className="fixed bottom-0 shadow-[0_35px_60px_10px_rgba(0,0,0,0.3)] bg-white w-screen rounded-t-2xl  text-center">
+                  <div className="fixed bottom-0 sm:relative sm:justify-center sm:items-center sm:rounded-2xl shadow-[0_35px_60px_10px_rgba(0,0,0,0.3)] bg-white w-screen sm:w-96 rounded-t-2xl  text-center">
                     <div className="space-y-2 p-4">
                       <div>
                         <div className="flex justify-center">
@@ -53,7 +69,8 @@ const AddOrderMenu = (props) => {
                             className="text-gray-400"
                             onClick={() => {
                               setIsOpen(false);
-                              setQuantity(1);
+                              setNewOrderQuantity(1);
+                              setModifyOrder(false);
                             }}
                           >
                             <CloseIcon />
@@ -62,51 +79,86 @@ const AddOrderMenu = (props) => {
 
                         <p className="font-semibold text-gray-900 ">
                           {" "}
-                          {price} €
+                          {(modifyOrder === false && newOrderPrice) ||
+                            lastOrderPrice}{" "}
+                          €
                         </p>
                         <p className="text-sm text-gray-500">{description}</p>
                       </div>
                     </div>
 
-                    <div className="shadow-[0_35px_60px_10px_rgba(0,0,0,0.3)] space-y-2 p-4">
+                    <div className="shadow-[0_35px_60px_10px_rgba(0,0,0,0.3)] sm:rounded-2xl space-y-2 p-4">
                       <div className="flex text-lg pb-2 justify-center space-x-6">
                         <button
-                          onClick={() => {
-                            if (quantity === 1) {
-                              return;
-                            }
-                            setQuantity(quantity - 1);
-                          }}
+                          onClick={
+                            (modifyOrder === false &&
+                              (() => {
+                                if (newOrderQuantity === 1) {
+                                  return;
+                                }
+                                setNewOrderQuantity(newOrderQuantity - 1);
+                              })) ||
+                            (() => {
+                              if (lastOrderQuantity === 1) {
+                                return;
+                              }
+                              setLastOrderQuantity(lastOrderQuantity - 1);
+                            })
+                          }
                           className="text-black text-lg hover:scale-125 outline-none"
                         >
                           -
                         </button>
-                        <p className="font-semibold text-black">{quantity}</p>
+                        <p className="font-semibold text-black">
+                          {(modifyOrder === false && newOrderQuantity) ||
+                            lastOrderQuantity}
+                        </p>
                         <button
-                          onClick={() => {
-                            setQuantity(quantity + 1);
-                          }}
+                          onClick={
+                            (modifyOrder === false &&
+                              (() => {
+                                setNewOrderQuantity(newOrderQuantity + 1);
+                              })) ||
+                            (() => {
+                              setLastOrderQuantity(lastOrderQuantity + 1);
+                            })
+                          }
                           className="text-black text-lg hover:scale-125 outline-none"
                         >
                           +
                         </button>
                       </div>
-                      <button
-                        onClick={() => {
-                          addToOrder(
-                            name,
-                            newPrice,
-                            quantity,
-                            description,
-                            price_id
-                          );
-                          setIsOpen(false);
-                          setQuantity(1);
-                        }}
-                        className=" bg-amber-500 text-white p-2 w-full rounded-full"
-                      >
-                        {`aggiungi all'ordine ${price * quantity}€`}
-                      </button>
+                      {modifyOrder === true && (
+                        <button
+                          onClick={() => {
+                            updateData(name, lastOrderQuantity, lastOrderPrice);
+                            setIsOpen(false);
+                            setModifyOrder(false);
+                            setNewOrderQuantity(1);
+                          }}
+                          className=" bg-amber-500 text-white p-2 w-full rounded-full"
+                        >
+                          {`modifica ordine ${lastOrderPrice}€`}
+                        </button>
+                      )}
+                      {modifyOrder === false && (
+                        <button
+                          onClick={() => {
+                            addToOrder(
+                              name,
+                              newOrderPrice,
+                              newOrderQuantity,
+                              description,
+                              price_id
+                            );
+                            setIsOpen(false);
+                            setNewOrderQuantity(1);
+                          }}
+                          className=" bg-amber-500 text-white p-2 w-full rounded-full"
+                        >
+                          {`aggiungi all'ordine ${newOrderPrice}€`}
+                        </button>
+                      )}
                     </div>
                   </div>
                 </Dialog.Panel>

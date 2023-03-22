@@ -9,7 +9,7 @@ export default async function handler(req, res) {
         line_items: items,
         mode: "payment",
         success_url: `${req.headers.origin}/?success=true`,
-        cancel_url: `${req.headers.origin}/?canceled=true`,
+        cancel_url: `${req.headers.origin}/orderNow/menuCompleto?canceled=true`,
       });
       res.redirect(303, session.url);
     } catch (err) {

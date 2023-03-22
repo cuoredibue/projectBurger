@@ -35,18 +35,18 @@ const Checkout = () => {
     fetchData();
   }, []);
 
-  //se ricarico pagina mi da errore questa parte:
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search);
+    if (query.get("success")) {
+      console.log("Order placed! You will receive an email confirmation.");
+    }
 
-  // const query = new URLSearchParams(window.location.search);
-  // if (query.get("success")) {
-  //   console.log("Order placed! You will receive an email confirmation.");
-  // }
-
-  // if (query.get("canceled")) {
-  //   console.log(
-  //     "Order canceled -- continue to shop around and checkout when you’re ready."
-  //   );
-  // }
+    if (query.get("canceled")) {
+      console.log(
+        "Order canceled -- continue to shop around and checkout when you’re ready."
+      );
+    }
+  }, []);
 
   const prepareToCheckout = () => {
     let list = orderList.map((item) => {
@@ -117,9 +117,9 @@ const Checkout = () => {
     fetchData();
   };
   return (
-    <div className="h-screen ">
-      <div className="flex justify-between items-center h-14 shadow w-screen px-4">
-        <Link href="/orderNow/menuCompleto" className="text-gray-400">
+    <div className="h-screen grid sm:sticky sm:top-0">
+      <div className="flex sm:justify-center  bg-white justify-between items-center h-14 shadow w-screen sm:w-96 px-4">
+        <Link href="/orderNow/menuCompleto" className="text-gray-400 sm:hidden">
           <ArrowBackIosNewOutlinedIcon />
         </Link>
         <div className="flex space-x-2">
@@ -127,14 +127,19 @@ const Checkout = () => {
           <p className="mr-2 text-lg">Il tuo ordine</p>
         </div>
       </div>
-      {pageIsLoad === false && <div className="h-screen w-screen "></div>}
-      <div className="w-full space-y-2 pb-28">
+      {pageIsLoad === false && (
+        <div className="h-screen sm:hidden w-screen "></div>
+      )}
+      <div className="w-full   space-y-2 sm:pb-0 pb-28">
         {orderList.map((item, index) => {
           const { name, quantity, price, price_id } = item;
           const checkoutItems = { price: price_id, quantity };
 
           return (
-            <div className="h-10 w-screen  flex items-center justify-between shadow-sm pl-1">
+            <div
+              key={price_id}
+              className="h-10 w-screen sm:w-96 flex items-center justify-between shadow-sm pl-1"
+            >
               <div className="flex  items-center space-x-2">
                 <div
                   onClick={() => {
@@ -173,7 +178,7 @@ const Checkout = () => {
       {orderList.length > 0 && (
         // Passo come checkoutItems convertito col metodo .strigify()
         <form action="/api/checkout_session" method="POST">
-          <div className="fixed bottom-0 bg-white space-y-4 p-4 w-full shadow-[0_35px_60px_10px_rgba(0,0,0,0.3)]">
+          <div className="fixed bottom-0 bg-white sm:place-self-end sm:sticky space-y-4 p-4 w-full sm:w-96 shadow-[0_35px_60px_10px_rgba(0,0,0,0.3)]">
             <p>{`Totale: ${sumPrice}€`}</p>
             <input
               type="hidden"
@@ -184,7 +189,7 @@ const Checkout = () => {
             <button
               type="submit"
               role="link"
-              className=" h-10  rounded bg-amber-500 flex justify-center items-center text-white"
+              className=" h-10 w-full  rounded bg-amber-500 flex justify-center items-center text-white"
             >
               vai al pagamento
             </button>
