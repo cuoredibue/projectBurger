@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../pages";
 import { loadStripe } from "@stripe/stripe-js";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
@@ -14,6 +15,7 @@ const CheckoutComponent = (props) => {
     setModifyOrder,
     pageIsLoad,
     setPageIsLoad,
+    fetchData,
   } = props;
   const [checkoutItems, setCheckoutItems] = useState([]);
   const [sumPrice, setSumPrice] = useState(null);
@@ -63,6 +65,15 @@ const CheckoutComponent = (props) => {
   useEffect(() => {
     sumOrders();
   }, [orderList]);
+
+  const removeItem = async (name) => {
+    const { error } = await supabase.from("order").delete().eq("name", name);
+
+    if (error) {
+      console.log(error);
+    }
+    fetchData("order");
+  };
 
   return (
     <div className="shadow mx-6 bg-white">
@@ -118,7 +129,16 @@ const CheckoutComponent = (props) => {
                 </p>
                 <p>{description}</p>
               </div>
-              <p>{`${price}€`}</p>
+
+              <div className="flex space-x-3">
+                <p>{`${price}€`}</p>
+                <DeleteOutlinedIcon
+                  onClick={() => {
+                    removeItem(name);
+                  }}
+                  className="text-red-400"
+                />
+              </div>
             </div>
           );
         })}

@@ -117,9 +117,9 @@ const Checkout = () => {
     fetchData();
   };
   return (
-    <div className="h-screen grid sm:sticky sm:top-0">
-      <div className="flex sm:justify-center  bg-white justify-between items-center h-14 shadow w-screen sm:w-96 px-4">
-        <Link href="/orderNow/menuCompleto" className="text-gray-400 sm:hidden">
+    <div className="h-screen ">
+      <div className="flex  bg-white justify-between items-center h-14 shadow w-screen  px-4">
+        <Link href="/orderNow/menuCompleto" className="text-gray-400">
           <ArrowBackIosNewOutlinedIcon />
         </Link>
         <div className="flex space-x-2">
@@ -127,10 +127,8 @@ const Checkout = () => {
           <p className="mr-2 text-lg">Il tuo ordine</p>
         </div>
       </div>
-      {pageIsLoad === false && (
-        <div className="h-screen sm:hidden w-screen "></div>
-      )}
-      <div className="w-full   space-y-2 sm:pb-0 pb-28">
+      {pageIsLoad === false && <div className="h-screen w-screen "></div>}
+      <div className="w-full   space-y-2 pb-28">
         {orderList.map((item, index) => {
           const { name, quantity, price, price_id } = item;
           const checkoutItems = { price: price_id, quantity };
@@ -138,9 +136,9 @@ const Checkout = () => {
           return (
             <div
               key={price_id}
-              className="h-10 w-screen sm:w-96 flex items-center justify-between shadow-sm pl-1"
+              className="h-10 w-screen flex items-center justify-between pl-1"
             >
-              <div className="flex  items-center space-x-2">
+              <div className="flex items-center space-x-2">
                 <div
                   onClick={() => {
                     addQuantity(name, quantity, price);
@@ -178,7 +176,7 @@ const Checkout = () => {
       {orderList.length > 0 && (
         // Passo come checkoutItems convertito col metodo .strigify()
         <form action="/api/checkout_session" method="POST">
-          <div className="fixed bottom-0 bg-white sm:place-self-end sm:sticky space-y-4 p-4 w-full sm:w-96 shadow-[0_35px_60px_10px_rgba(0,0,0,0.3)]">
+          <div className="fixed bottom-0 bg-white space-y-4 p-4 w-full shadow-[0_35px_60px_10px_rgba(0,0,0,0.3)]">
             <p>{`Totale: ${sumPrice}€`}</p>
             <input
               type="hidden"

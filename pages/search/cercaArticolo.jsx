@@ -113,9 +113,9 @@ const SearchPage = () => {
   };
 
   return (
-    <div className="sm:grid sm:grid-cols-3 lg:grid-cols-9 ">
-      <div className=" col-span-2 lg:col-span-3 lg:col-start-3">
-        <div className="sticky top-0 flex shadow h-10 items-center space-x-2  bg-white">
+    <div className="sm:grid sm:grid-cols-3 lg:grid-cols-9 xl:grid-cols-8 ">
+      <div className="sm:space-y-4 sm:col-span-2 xl:col-span-2 xl:col-start-3 lg:col-span-3  lg:col-start-3">
+        <div className="sticky top-0 flex sm:shadow-none shadow h-10 items-center justify-center space-x-2 bg-white">
           <Link href="/orderNow/menuCompleto">
             <ArrowBackIosNewOutlinedIcon className="text-gray-400 bg-white" />
           </Link>
@@ -125,14 +125,14 @@ const SearchPage = () => {
               setInputValue(e.target.value.toLocaleLowerCase());
             }}
             value={inputValue}
-            className="bg-white  h-10 p-2 w-screen focus:outline-none "
+            className="bg-gray-100 sm:rounded h-10 grow focus:outline-none "
             placeholder="Cerca nel menu "
             type="text"
           />
         </div>
         {itemNotFound !== null && <div className=" p-2">{itemNotFound}</div>}
         {inputValue !== "" && (
-          <div className="sm:fixed sm:h-screen top-10 overflow-auto space-y-2  pb-14">
+          <div className=" sm:h-screen items-center top-10 overflow-auto  space-y-2  pb-14">
             {filteredList.map((item, index) => {
               const { name, price, description, price_id } = item;
               // divido in tre parti il nome per potere applicare uno stile personalizzato alla parte equivalente all'input che si digita
@@ -152,7 +152,7 @@ const SearchPage = () => {
                     setIsOpen(true);
                     setInfoCard({ name, price, description, price_id });
                   }}
-                  className="p-2 shadow"
+                  className="p-2 shadow sm:shadow-none sm:border sm:rounded "
                 >
                   <div className="flex font-semibold text-lg">
                     <p>{namePart1}</p>
@@ -192,6 +192,7 @@ const SearchPage = () => {
           setModifyOrder={setModifyOrder}
           pageIsLoad={pageIsLoad}
           setPageIsLoad={setPageIsLoad}
+          fetchData={fetchData}
         />
       </div>
     </div>

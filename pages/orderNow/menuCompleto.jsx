@@ -155,7 +155,9 @@ const MenuCompleto = () => {
   return (
     <div className=" h-screen w-screen grid  bg-white">
       <Header />
-      <Image src={burgerImage} alt="burger" className="h-42" />
+
+      <Image src={burgerImage} alt="burger" />
+
       <div className="sm:grid sm:grid-cols-3 lg:grid-cols-9 ">
         <div className="grid gap-4 pb-4 grid-cols-1 col-span-2 lg:col-span-3 lg:col-start-3  bg-white px-4">
           <div ref={navbarRef} className="sticky top-0">
@@ -255,6 +257,7 @@ const MenuCompleto = () => {
             setModifyOrder={setModifyOrder}
             pageIsLoad={pageIsLoad}
             setPageIsLoad={setPageIsLoad}
+            fetchData={fetchData}
           />
         </div>
 
