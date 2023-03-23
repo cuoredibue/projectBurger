@@ -12,12 +12,13 @@ import FooterMessage from "../../components/FooterMessage";
 import CheckoutComponent from "../../components/CheckoutComponent";
 
 import Checkout from "../payment/checkout";
-import { loadStripe } from "@stripe/stripe-js";
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-);
+// import { loadStripe } from "@stripe/stripe-js";
+// const stripePromise = loadStripe(
+//   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+// );
 
 const MenuCompleto = () => {
+  const [pageIsLoad, setPageIsLoad] = useState(false);
   const [activeSection, setActiveSection] = useState("burger");
   const [activeTitle, setActiveTitle] = useState("burger");
   const navbarRef = useRef(null);
@@ -54,6 +55,7 @@ const MenuCompleto = () => {
     if (error) {
       console.log(error);
     }
+    setPageIsLoad(true);
   };
 
   const fetchAllTable = async () => {
@@ -151,11 +153,11 @@ const MenuCompleto = () => {
     fetchData("order");
   };
   return (
-    <div className=" h-screen w-screen grid bg-white">
+    <div className=" h-screen w-screen grid  bg-white">
       <Header />
       <Image src={burgerImage} alt="burger" className="h-42" />
-      <div className="sm:grid sm:grid-cols-3">
-        <div className="grid gap-4 pb-4 grid-cols-1 col-span-2 bg-white px-4">
+      <div className="sm:grid sm:grid-cols-3 lg:grid-cols-9 ">
+        <div className="grid gap-4 pb-4 grid-cols-1 col-span-2 lg:col-span-3 lg:col-start-3  bg-white px-4">
           <div ref={navbarRef} className="sticky top-0">
             <HeaderNavbar
               activeTitle={activeTitle}
@@ -245,12 +247,16 @@ const MenuCompleto = () => {
             );
           })}
         </div>
-        <CheckoutComponent
-          setIsOpen={setIsOpen}
-          setInfoCard={setInfoCard}
-          orderList={orderList}
-          setModifyOrder={setModifyOrder}
-        />
+        <div className="hidden xl:col-span-2  sm:flex">
+          <CheckoutComponent
+            setIsOpen={setIsOpen}
+            setInfoCard={setInfoCard}
+            orderList={orderList}
+            setModifyOrder={setModifyOrder}
+            pageIsLoad={pageIsLoad}
+            setPageIsLoad={setPageIsLoad}
+          />
+        </div>
 
         <AddOrderMenu
           infoCard={infoCard}
