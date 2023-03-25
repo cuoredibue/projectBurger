@@ -155,8 +155,8 @@ const MenuCompleto = () => {
   return (
     <div className=" h-screen w-screen grid  bg-white">
       <Header />
-
-      <Image src={burgerImage} alt="burger" />
+      <div className="bg-[url('https://nqxbbqcnglvcblwkqilb.supabase.co/storage/v1/object/public/foto/burgerOrder.jpg')] sm:h-96 2xl:h-[48rem] h-40 w-full sm:mb-2 bg-cover bg-center"></div>
+      {/* <Image src={burgerImage} alt="burger" /> */}
 
       <div className="sm:grid sm:grid-cols-3 lg:grid-cols-9 ">
         <div className="grid gap-4 pb-4 grid-cols-1 col-span-2 lg:col-span-3 lg:col-start-3  bg-white px-4">

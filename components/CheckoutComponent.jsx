@@ -76,30 +76,38 @@ const CheckoutComponent = (props) => {
   };
 
   return (
-    <div className="shadow mx-6 bg-white">
-      <div className="  flex justify-between p-4 text-2xl font-semibold bg-white">
+    <div className=" mx-6  bg-white">
+      <div className=" shadow flex rounded-t-lg justify-between p-4 text-2xl font-semibold bg-white">
         <p>Il tuo ordine</p>
         <p>{`${sumPrice}€`}</p>
       </div>
 
-      <div className="bg-white sticky  col-span-1 overflow-auto top-0 h-screen">
+      <div className="bg-white rounded-b-lg sticky shadow col-span-1 overflow-auto top-0 ">
         <form
           action="/api/checkout_session"
           method="POST"
-          className="h-20 p-2 flex justify-center items-center shadow-md sticky top-0 bg-white"
+          className="h-26 p-2 flex justify-center items-center shadow-md sticky top-0 bg-white"
         >
           <input
             type="hidden"
             name="obj"
             value={JSON.stringify(checkoutItems)}
           />
-          <button
-            type="submit"
-            role="link"
-            className="p-5 bg-amber-500 w-full text-white text-lg rounded-full text-center "
-          >
-            vai al pagamento
-          </button>
+
+          {(orderList.length > 0 && (
+            <button
+              type="submit"
+              role="link"
+              className="p-4 bg-amber-500 w-[10rem] mx-4  text-white text-2xl rounded-full text-center "
+            >
+              vai al pagamento
+            </button>
+          )) || (
+            <div className="p-4 bg-gray-200 w-[10rem] mx-4  text-white text-2xl rounded-full text-center ">
+              {" "}
+              vai al pagamento
+            </div>
+          )}
         </form>
         {orderList.map((item) => {
           const { name, price, quantity, description, price_id } = item;
@@ -142,7 +150,7 @@ const CheckoutComponent = (props) => {
             </div>
           );
         })}
-        <div className="flex justify-between font-semibold px-8 items-center sticky w-full bottom-0 shadow-[0_35px_60px_10px_rgba(0,0,0,0.3)]  bg-white h-14">
+        <div className="flex justify-between font-semibold px-8 items-center sticky w-full bottom-0 shadow-[0_-2px_8px_0px_rgba(0,0,0,0.1)] rounded-b-lg bg-white h-14">
           <p>Totale</p>
           <p>{`${sumPrice} €`}</p>
         </div>

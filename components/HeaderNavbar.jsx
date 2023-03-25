@@ -2,7 +2,7 @@ const HeaderNavbar = (props) => {
   const { handleNavigation, activeTitle } = props;
 
   return (
-    <div className="flex justify-between items-center font-semibold shadow-md px-5 h-14 z-10 -mx-4 text-amber-500 bg-white">
+    <div className="flex sm:rounded sm:border-gray-100 sm:border  justify-between items-center font-semibold shadow-md px-5 h-14 z-10 -mx-4 text-amber-500 bg-white">
       <div
         className={
           (activeTitle === "burger" &&
