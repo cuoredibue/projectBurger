@@ -77,16 +77,16 @@ const CheckoutComponent = (props) => {
 
   return (
     <div className=" mx-6  bg-white">
-      <div className=" shadow flex rounded-t-lg justify-between p-4 text-2xl font-semibold bg-white">
+      <div className=" border-x  border-x-gray-100 flex rounded-t-lg justify-between p-4 text-2xl font-semibold bg-white">
         <p>Il tuo ordine</p>
         <p>{`${sumPrice}€`}</p>
       </div>
 
-      <div className="bg-white rounded-b-lg sticky shadow col-span-1 overflow-auto top-0 ">
+      <div className="bg-white rounded-b-lg h-screen sticky col-span-1 overflow-auto top-0 ">
         <form
           action="/api/checkout_session"
           method="POST"
-          className="h-26 p-2 flex justify-center items-center shadow-md sticky top-0 bg-white"
+          className="h-26 p-2 flex justify-center border-x  border-x-gray-100 items-center shadow sticky top-0 bg-white"
         >
           <input
             type="hidden"
@@ -114,7 +114,7 @@ const CheckoutComponent = (props) => {
           const singleItemPrice = price / quantity;
 
           return (
-            <div className="p-8 space-x-4 justify-between flex">
+            <div className="p-8  border-x  border-x-gray-100 space-x-4 justify-between flex">
               <div>
                 <p className="">x{quantity}</p>
                 <p
@@ -150,7 +150,7 @@ const CheckoutComponent = (props) => {
             </div>
           );
         })}
-        <div className="flex justify-between font-semibold px-8 items-center sticky w-full bottom-0 shadow-[0_-2px_8px_0px_rgba(0,0,0,0.1)] rounded-b-lg bg-white h-14">
+        <div className="flex justify-between font-semibold px-8 items-center sticky w-full h bottom-0 shadow-md rounded-b-lg border  border-gray-100 bg-white h-14">
           <p>Totale</p>
           <p>{`${sumPrice} €`}</p>
         </div>
