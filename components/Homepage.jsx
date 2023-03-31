@@ -13,7 +13,7 @@ const HomePage = () => {
           Burger giusto!
         </h1>
         <p className="text-amber-800 leading-8 mx-16">
-          scopri i diversi sapori e gustateli in qualsiasi momento
+          scopri diversi sapori e gustateli in qualsiasi momento
         </p>
         <Link href="/orderNow/menuCompleto">
           <button className="text-gray-100  bg-amber-500 mt-4 p-6 rounded-full">

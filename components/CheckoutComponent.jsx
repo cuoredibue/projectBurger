@@ -76,8 +76,8 @@ const CheckoutComponent = (props) => {
   };
 
   return (
-    <div className=" mx-6  bg-white">
-      <div className=" border-x  border-x-gray-100 flex rounded-t-lg justify-between p-4 text-2xl font-semibold bg-white">
+    <div className=" mx-6 rounded-t-lg bg-white">
+      <div className=" border-x  border-x-gray-200 flex rounded-t-lg justify-between p-4 text-2xl font-semibold bg-white">
         <p>Il tuo ordine</p>
         <p>{`${sumPrice}€`}</p>
       </div>
@@ -86,7 +86,7 @@ const CheckoutComponent = (props) => {
         <form
           action="/api/checkout_session"
           method="POST"
-          className="h-26 p-2 flex justify-center border-x  border-x-gray-100 items-center shadow sticky top-0 bg-white"
+          className="h-26 p-2 flex justify-center border-x  border-x-gray-200 items-center shadow-md sticky top-0 bg-white"
         >
           <input
             type="hidden"
@@ -114,7 +114,7 @@ const CheckoutComponent = (props) => {
           const singleItemPrice = price / quantity;
 
           return (
-            <div className="p-8  border-x  border-x-gray-100 space-x-4 justify-between flex">
+            <div className="p-8  border-x  border-x-gray-200 space-x-4 justify-between flex">
               <div>
                 <p className="">x{quantity}</p>
                 <p
@@ -131,7 +131,7 @@ const CheckoutComponent = (props) => {
                       quantity,
                     });
                   }}
-                  className="underline"
+                  className="underline cursor-pointer"
                 >
                   {name}
                 </p>
@@ -144,13 +144,13 @@ const CheckoutComponent = (props) => {
                   onClick={() => {
                     removeItem(name);
                   }}
-                  className="text-red-400"
+                  className="text-red-400 cursor-pointer"
                 />
               </div>
             </div>
           );
         })}
-        <div className="flex justify-between font-semibold px-8 items-center sticky w-full h bottom-0 shadow-md rounded-b-lg border  border-gray-100 bg-white h-14">
+        <div className="flex justify-between font-semibold px-8 items-center sticky w-full h bottom-0 shadow-md rounded-b-lg border  border-gray-200 bg-white h-14">
           <p>Totale</p>
           <p>{`${sumPrice} €`}</p>
         </div>

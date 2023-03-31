@@ -1,7 +1,5 @@
 import { useEffect, useState, useRef } from "react";
 import { supabase } from "../index";
-import Image from "next/image";
-import burgerImage from "../../images/burgerOrder.jpg";
 
 // components
 import HeaderNavbar from "../../components/HeaderNavbar";
@@ -10,12 +8,7 @@ import FoodCard from "../../components/FoodCard";
 import Header from "../../components/Header";
 import FooterMessage from "../../components/FooterMessage";
 import CheckoutComponent from "../../components/CheckoutComponent";
-
-import Checkout from "../payment/checkout";
-// import { loadStripe } from "@stripe/stripe-js";
-// const stripePromise = loadStripe(
-//   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-// );
+import BurgerLogo from "../../images/burgerLogo";
 
 const MenuCompleto = () => {
   const [pageIsLoad, setPageIsLoad] = useState(false);
@@ -154,20 +147,32 @@ const MenuCompleto = () => {
   };
   return (
     <div className=" h-screen w-screen grid  bg-white">
-      <Header />
-      <div className="bg-[url('https://nqxbbqcnglvcblwkqilb.supabase.co/storage/v1/object/public/foto/burgerOrder.jpg')] sm:h-96 2xl:h-[48rem] h-40 w-full sm:mb-2 bg-cover bg-center"></div>
-      {/* <Image src={burgerImage} alt="burger" /> */}
+      {/* <Header /> */}
+      <div className="bg-[url('https://nqxbbqcnglvcblwkqilb.supabase.co/storage/v1/object/public/foto/burgerOrder.jpg')] sm:h-96  2xl:h-[48rem]  h-40 w-full sm:mb-2 bg-cover bg-center">
+        <Header />
+      </div>
 
-      <div className="sm:grid sm:grid-cols-3 lg:grid-cols-9 ">
-        <div className="grid gap-4 pb-4 grid-cols-1 col-span-2 lg:col-span-3 lg:col-start-3  bg-white px-4">
-          <div ref={navbarRef} className="sticky top-0">
+      <div className="sm:flex sm:justify-center">
+        <div className="grid gap-4 pb-4 bg-white px-4">
+          <div className="grid bg-white h-32 sm:h-44 sm:rounded-xl sm:border-gray-100 sm:border  sm:-mt-20 sm:shadow">
+            <div className="flex justify-self-center justify-center items-center w-20 h-20 border border-gray-200 -mt-10 bg-white rounded-lg">
+              <BurgerLogo />
+            </div>
+            <div className="justify-self-center text-center">
+              <p className="text-2xl font-bold">Burger giusto</p>
+              <p>100% made in Italy</p>
+
+              <p>p.zza Duomo, Milano, 20100</p>
+            </div>
+          </div>
+          <div ref={navbarRef} className=" sticky top-0">
             <HeaderNavbar
               activeTitle={activeTitle}
               handleNavigation={handleNavigation}
             />
           </div>
 
-          <div id="title-burger" className="h-8 bg-white text-black pl-4">
+          <div id="title-burger" className=" bg-white text-black pl-4">
             burger
           </div>
           <div
@@ -192,7 +197,7 @@ const MenuCompleto = () => {
               );
             })}
           </div>
-          <div id="title-menu" className="h-8 bg-white text-black  pl-4">
+          <div id="title-menu" className="bg-white text-black  pl-4">
             menu
           </div>
 
@@ -212,7 +217,7 @@ const MenuCompleto = () => {
             );
           })}
 
-          <div id="title-drinks" className="h-8 bg-white text-black  pl-4">
+          <div id="title-drinks" className="bg-white text-black  pl-4">
             drinks
           </div>
           {drinksList.map((item, index) => {
@@ -230,7 +235,7 @@ const MenuCompleto = () => {
               />
             );
           })}
-          <div id="title-dolci" className="h-8 bg-white text-black  pl-4">
+          <div id="title-dolci" className="bg-white text-black  pl-4">
             dolci
           </div>
           {dolciList.map((item, index) => {
@@ -249,7 +254,7 @@ const MenuCompleto = () => {
             );
           })}
         </div>
-        <div className="hidden xl:col-span-2  sm:flex">
+        <div className="hidden sm:-mt-20 sm:rounded-lg xl:col-span-2  sm:flex">
           <CheckoutComponent
             setIsOpen={setIsOpen}
             setInfoCard={setInfoCard}
