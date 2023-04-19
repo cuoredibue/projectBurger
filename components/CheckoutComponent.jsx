@@ -109,12 +109,15 @@ const CheckoutComponent = (props) => {
             </div>
           )}
         </form>
-        {orderList.map((item) => {
+        {orderList.map((item, index) => {
           const { name, price, quantity, description, price_id } = item;
           const singleItemPrice = price / quantity;
 
           return (
-            <div className="p-8  border-x  border-x-gray-200 space-x-4 justify-between flex">
+            <div
+              key={index}
+              className="p-8  border-x  border-x-gray-200 space-x-4 justify-between flex"
+            >
               <div>
                 <p className="">x{quantity}</p>
                 <p

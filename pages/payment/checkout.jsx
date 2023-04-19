@@ -15,6 +15,7 @@ const Checkout = () => {
   const [orderList, setOrderList] = useState([]);
   const [sumPrice, setSumPrice] = useState(null);
   const [pageIsLoad, setPageIsLoad] = useState(false);
+  const [pageIsReload, setPageIsReload] = useState(false);
   const [checkoutItems, setCheckoutItems] = useState([]);
 
   const fetchData = async () => {
@@ -29,6 +30,7 @@ const Checkout = () => {
       setOrderList(data);
     }
     setPageIsLoad(true);
+    setPageIsReload(!pageIsReload);
   };
 
   useEffect(() => {
@@ -56,7 +58,7 @@ const Checkout = () => {
   };
   useEffect(() => {
     prepareToCheckout();
-  }, [pageIsLoad]);
+  }, [pageIsReload]);
 
   const sumOrders = () => {
     const prices = orderList.map((item) => {
